@@ -49,4 +49,24 @@ module Dropbox
   # Contains the metadata of a deleted file.
   class DeletedMetadata < Metadata
   end
+
+  # Contains the metadata of a file's shared link.
+  class FileLinkMetadata < FileMetadata
+    attr_reader :url
+
+    def initialize(attrs={})
+      @url = attrs.delete('url')
+      super(attrs)
+    end
+  end
+
+  # Contains the metadata of a folder's shared link.
+  class FolderLinkMetadata < FolderMetadata
+    attr_reader :url
+
+    def initialize(attrs={})
+      @url = attrs.delete('url')
+      super(attrs)
+    end
+  end
 end

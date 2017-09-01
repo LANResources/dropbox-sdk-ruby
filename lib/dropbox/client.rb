@@ -314,6 +314,25 @@ module Dropbox
       SpaceUsage.new(resp)
     end
 
+    # List all shared links on a file or folder
+    #
+    # @param [String] path
+    # @return [Array<Dropbox::FileLinkMetadata>]
+    def list_shared_links(path)
+      resp = request('/sharing/list_shared_links', path: path)
+      Array(resp['links']).map{|link| link['.tag'] == 'folder' ? FolderLinkMetadata.new(link) : FileLinkMetadata.new(link) }
+    end
+
+    # Create a shared link with custom settings
+    #
+    # @param [String] path
+    # @param [String] settings
+    # @return [Dropbox::FileMetadata] metadata
+    def create_shared_link_with_settings(path, settings = {})
+      resp = request('/sharing/create_shared_link_with_settings', path: path, settings: settings)
+      FileLinkMetadata.new(resp)
+    end
+
     private
       def parse_tagged_response(resp)
         case resp['.tag']
